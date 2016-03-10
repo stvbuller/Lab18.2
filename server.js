@@ -16,6 +16,7 @@ db.on('error', function(err) {
   console.log('Database Error:', err);
 });
 
+//scrape data and save to database
 app.get('/scrape', function(req, res) {
   request('https://www.reddit.com/', function (error, response, html) {
     var $ = cheerio.load(html);
@@ -27,16 +28,24 @@ app.get('/scrape', function(req, res) {
       var title = $(this).text();
       var link = $(element).children().attr('href');
 
-      result.push({
-        title: title,
-        link: link
-      })
-
+      if (title && link) {
+        db.scrapedData.save({
+          title: title,
+          link: link
+        }, function(err, saved) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(saved);
+          }
+        });
+      }
     });
-    console.log(result);
   });
+  res.send("Scrapped saved");
 });
 
+//get data from the database
 app.get('/illegal', function(req, res) {
   db.scrapedData.find(function (err, dbResults) {
   // dbResults is an array of all the documents in scrapedData

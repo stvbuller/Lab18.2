@@ -5,13 +5,20 @@ var PORT = process.env.PORT || 3000;
 
 var mongojs = require('mongojs');
 var db = mongojs("zoo_db", ["animals"])
+db.on('error', function(err) {
+  console.error("Database error", err);
+});
 
+app.use(express.static("public"));
+
+
+//routes
 app.get('/', function(req, res) {
-  res.send("You got animals");
+  res.sendFile(process.cwd() + "/index.html");
 });
 
 app.get('/animals', function(req, res) {
-  db.animals.find(function (err, dbResults) {
+  db.animals.find({}, function (err, dbResults) {
   // dbResults is an array of all the documents in animals
     if(err) {
       throw err;

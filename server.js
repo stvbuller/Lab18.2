@@ -1,3 +1,4 @@
+//setup request and cheerio
 var request = require('request');
 var cheerio = require('cheerio');
 
@@ -16,6 +17,8 @@ db.on('error', function(err) {
   console.log('Database Error:', err);
 });
 
+
+//routes
 //scrape data and save to database
 app.get('/scrape', function(req, res) {
   request('https://www.reddit.com/', function (error, response, html) {

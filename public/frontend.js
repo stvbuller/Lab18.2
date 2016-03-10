@@ -14,4 +14,9 @@ $(document).ready(function(){
       });
     });
   });
+
+  $("#nameButton").click(function(e) {
+    alert("Clicked name!")
+  });
+
 });
